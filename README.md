@@ -1,4 +1,5 @@
 # tmux-session-manager
+
 A fuzzy terminal popup to manage tmux sessions using `fzf`.
 Just a simple and fast session manager for tmux — no plugin manager required. It opens a popup using `fzf` where you can:
 
