@@ -20,12 +20,12 @@ Just a simple and fast session manager for tmux — no plugin manager required. 
 ---
 
 🚀 Quick Install
-Add this single line to your ~/.tmux.conf:
+Add these [lines](session-manager.conf) to your ~/.tmux.conf:
 
 ```bash
-bind j display-popup -E -w 80% -h 60% -T 'tmux-session-manager' '
-  tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" | 
-  grep -v "^$(tmux display-message -p "#S")|" | 
+ bind j display-popup -E -w 80% -h 60% -T ' tmux-session-manager ' '
+  tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" |
+  grep -v "^$(tmux display-message -p "#S")|" |
   awk -F"|" "{
     status = (\$3 == \"attached\") ? \"\" : \"\"
     printf \"%-20s %s %2s windows %s\\n\", \$1, status, \$2, \"\"
@@ -42,12 +42,13 @@ bind j display-popup -E -w 80% -h 60% -T 'tmux-session-manager' '
       --bind="ctrl-d:execute(tmux kill-session -t {1})+reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
       --info=inline \
       --layout=reverse |
-  awk "{print \$1}" | 
+  awk "{print \$1}" |
   xargs -r tmux switch-client -t
 '
 ```
 
 Then reload your tmux config:
+
 ```bash
 tmux source-file ~/.tmux.conf
 ```
@@ -64,10 +65,13 @@ tmux source-file ~/.tmux.conf
 ## ⚙️ Customization
 
 Want to change the keybinding? Replace `j` with your preferred key:
+
 ```bash
 bind j display-popup -E -w 80% -h 60% -T 'tmux-session-manager' '
 ```
+
 Want a different popup size? Adjust the `-w` and `-h` values:
+
 ```bash
 bind j display-popup -E -w <width> -h <height> -T 'tmux-session-manager' '
 ```
@@ -75,15 +79,18 @@ bind j display-popup -E -w <width> -h <height> -T 'tmux-session-manager' '
 ## 🐛 Troubleshooting
 
 **Popup doesn't appear?**
+
 - Make sure you have tmux 3.2+: `tmux -V`
 - Check if `display-popup` is available: `tmux list-commands | grep popup`
 
 **fzf not found?**
+
 - Install fzf: `brew install fzf` or `apt install fzf`
 - Or follow the [official fzf installation guide](https://github.com/junegunn/fzf#installation)
 
 **No sessions to switch to?**
-- The manager only shows *other* sessions (not your current one)
+
+- The manager only shows _other_ sessions (not your current one)
 - Create more sessions: `tmux new-session -d -s mysession`
 
 ## 🤝 Contributing
