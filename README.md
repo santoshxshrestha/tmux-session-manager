@@ -7,7 +7,6 @@ Just a simple and fast session manager for tmux — no plugin manager required. 
 
 - View all other sessions (excluding your current one)
 - See how many windows each has
-- Preview windows in the selected session
 - Switch to it or kill it with a keybind
 
 ---
@@ -28,19 +27,19 @@ bind j display-popup -E -w 80% -h 60% -T 'tmux-session-manager' '
   tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" | 
   grep -v "^$(tmux display-message -p "#S")|" | 
   awk -F"|" "{
-    status = (\$3 == \"attached\") ? \"●\" : \"○\"
+    status = (\$3 == \"attached\") ? \"\" : \"\"
     printf \"%-20s %s %2s windows %s\\n\", \$1, status, \$2, \"\"
   }" |
   fzf --reverse \
-      --prompt="🔍 " \
+      --prompt="-> " \
       --header="═══ Session Switcher ═══ | Ctrl-R: refresh | Ctrl-D: delete" \
       --header-first \
       --border=rounded \
       --color="header:italic" \
       --preview="tmux list-windows -t {1} -F \"  #{window_index}: #{window_name} #{?window_active,(active),}\"" \
       --preview-window="right:40%:wrap" \
-      --bind="ctrl-r:reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"●\\\" : \\\"○\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
-      --bind="ctrl-d:execute(tmux kill-session -t {1})+reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"●\\\" : \\\"○\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
+      --bind="ctrl-r:reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
+      --bind="ctrl-d:execute(tmux kill-session -t {1})+reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
       --info=inline \
       --layout=reverse |
   awk "{print \$1}" | 
@@ -61,22 +60,6 @@ tmux source-file ~/.tmux.conf
 - **Ctrl-R** - Refresh the session list
 - **Ctrl-D** - Delete the selected session
 - **Esc** - Close without switching
-
-## 🎨 What You'll See
-
-```
-═══ Session Switcher ═══ | Ctrl-R: refresh | Ctrl-D: delete
-┌────────────────────────────────────────────────────────────┐
-│ work                 ● 3 windows                           │
-│ dotfiles             ○ 1 windows                           │
-│ side-project         ○ 5 windows                           │
-│ gaming               ● 2 windows                           │
-└────────────────────────────────────────────────────────────┘
-```
-
-**Icons explained:**
-- `●` - Session is attached (someone is using it)
-- `○` - Session is detached (running in background)
 
 ## ⚙️ Customization
 
@@ -109,7 +92,7 @@ Found a bug or have a feature idea? Feel free to open an issue or submit a PR!
 
 ## 📝 License
 
-MIT License - feel free to use this however you want!
+MIT License - [LICENSE](LICENSE) feel free to use this however you want!
 
 ---
 
