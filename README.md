@@ -3,11 +3,14 @@
 A fuzzy terminal popup to manage tmux sessions using `fzf`.
 ![tmux session manager popup](./assets/session-manager.png)
 
+![tmux session creator popup](./assets/session-creator.png)
+
 Just a simple and fast session manager for tmux — no plugin manager required. It opens a popup using `fzf` where you can:
 
 - View all other sessions (excluding your current one)
 - See how many windows each has
 - Switch to it or kill it with a keybind
+- Create new-session and switch to the newly create session
 
 ---
 
@@ -32,7 +35,7 @@ Add these [lines](session-manager.conf) to your ~/.tmux.conf:
   }" |
   fzf --reverse \
       --prompt="-> " \
-      --header="═══ Session Switcher ═══ | Ctrl-R: refresh | Ctrl-D: delete" \
+      --header="═══ Session Switcher ═══ | Ctrl-R: refresh | Ctrl-D: delete | Ctrl-N: new-session" \
       --header-first \
       --border=rounded \
       --color="header:italic" \
@@ -40,6 +43,7 @@ Add these [lines](session-manager.conf) to your ~/.tmux.conf:
       --preview-window="right:40%:wrap" \
       --bind="ctrl-r:reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
       --bind="ctrl-d:execute(tmux kill-session -t {1})+reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
+      --bind="ctrl-n:execute(bash -c '\''echo -n \"Session name ->  \" && read name && [ -n \"\$name\" ] && tmux new-session -d -s \"\$name\" 2>/dev/null && tmux switch-client -t \"\$name\"'\'')+abort" \
       --info=inline \
       --layout=reverse |
   awk "{print \$1}" |
@@ -60,7 +64,8 @@ tmux source-file ~/.tmux.conf
 - **Enter** - Switch to selected session
 - **Ctrl-R** - Refresh the session list
 - **Ctrl-D** - Delete the selected session
-- **Esc** - Close without switching
+- **Ctrl-N** - Create new-session and switch-client to newly created session
+- **Esc** - Close without switching session
 
 ## ⚙️ Customization
 
