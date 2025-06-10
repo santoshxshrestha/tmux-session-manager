@@ -3,6 +3,8 @@
 A fuzzy terminal popup to manage tmux sessions using `fzf`.
 ![tmux session manager popup](./assets/session-manager.png)
 
+![tmux session creator popup](./assets/session-creator.png)
+
 Just a simple and fast session manager for tmux — no plugin manager required. It opens a popup using `fzf` where you can:
 
 - View all other sessions (excluding your current one)
