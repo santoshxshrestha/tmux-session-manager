@@ -5,7 +5,7 @@ A fuzzy terminal popup to manage tmux sessions using `fzf`.
 
 ![tmux session creator popup](./assets/session-creator.png)
 
-Just a simple and fast session manager for tmux — no plugin manager required. It opens a popup using `fzf` where you can:
+Just a simple and fast session manager for tmux — available as a plugin or standalone. It opens a popup using `fzf` where you can:
 
 - View all other sessions (excluding your current one)
 - See how many windows each has
@@ -14,7 +14,7 @@ Just a simple and fast session manager for tmux — no plugin manager required. 
 
 ---
 
-## 🔧 Requirements
+## Requirements
 
 - `tmux` 3.2 or higher (for `display-popup`)
 - [`fzf`](https://github.com/junegunn/fzf)
@@ -22,8 +22,41 @@ Just a simple and fast session manager for tmux — no plugin manager required. 
 
 ---
 
-🚀 Quick Install
-Add these [lines](session-manager.conf) to your ~/.tmux.conf:
+## Installation
+
+### Via TPM (Tmux Plugin Manager)
+
+1. Add plugin to your `~/.tmux.conf`:
+
+```bash
+set -g @plugin 'santoshxshrestha/tmux-session-manager'
+```
+
+2. Press `prefix` + `I` to install
+
+### Manual Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/santoshxshrestha/tmux-session-manager ~/.tmux/plugins/tmux-session-manager
+```
+
+2. Add to your `~/.tmux.conf`:
+
+```bash
+run-shell ~/.tmux/plugins/tmux-session-manager/tmux-session-manager.tmux
+```
+
+3. Reload tmux config:
+
+```bash
+tmux source-file ~/.tmux.conf
+```
+
+### Quick Install (Standalone)
+
+Add these lines to your ~/.tmux.conf:
 
 ```bash
  bind j display-popup -E -w 80% -h 60% -T ' tmux-session-manager ' '
@@ -57,9 +90,24 @@ Then reload your tmux config:
 tmux source-file ~/.tmux.conf
 ```
 
-## 🎮 Usage
+## Usage
 
-- **Press `j`** (or your chosen keybind) to open the session manager
+### Default Key Binding
+
+- **Press `prefix` + `j`** to open the session manager
+
+### Custom Key Binding
+
+Add to your `~/.tmux.conf` to change the default key:
+
+```bash
+set -g @session_manager_key 'S'  # Use 'S' instead of 'j'
+```
+
+### Controls
+
+Once opened:
+
 - **Type to search** - Fuzzy find sessions by name
 - **Enter** - Switch to selected session
 - **Ctrl-R** - Refresh the session list
@@ -67,7 +115,16 @@ tmux source-file ~/.tmux.conf
 - **Ctrl-N** - Create new-session and switch-client to newly created session
 - **Esc** - Close without switching session
 
-## ⚙️ Customization
+## Customization
+
+### Available Options
+
+```bash
+# Key binding (default: 'j')
+set -g @session_manager_key 'j'
+```
+
+### Manual Customization (Standalone)
 
 Want to change the keybinding? Replace `j` with your preferred key:
 
@@ -81,7 +138,7 @@ Want a different popup size? Adjust the `-w` and `-h` values:
 bind j display-popup -E -w <width> -h <height> -T 'tmux-session-manager' '
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 **Popup doesn't appear?**
 
@@ -98,11 +155,19 @@ bind j display-popup -E -w <width> -h <height> -T 'tmux-session-manager' '
 - The manager only shows _other_ sessions (not your current one)
 - Create more sessions: `tmux new-session -d -s mysession`
 
+**Key binding conflicts?**
+
+If `prefix + j` conflicts with existing bindings, change it:
+
+```bash
+set -g @session_manager_key 'your-preferred-key'
+```
+
 ## 🤝 Contributing
 
 Found a bug or have a feature idea? Feel free to open an issue or submit a PR!
 
-## 📝 License
+## License
 
 MIT License - [LICENSE](LICENSE) feel free to use this however you want!
 
