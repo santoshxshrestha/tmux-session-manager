@@ -1,4 +1,10 @@
- bind j display-popup -E -w 80% -h 60% -T ' tmux-session-manager ' '
+#!/usr/bin/env bash
+
+default_key_binding="@session_manager_key"
+key_binding_option="$(tmux show-option -gqv "$default_key_binding")"
+key_binding="${key_binding_option:-"j"}"
+
+tmux bind-key "$key_binding" display-popup -E -w 80% -h 60% -T ' tmux-session-manager ' '
   tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" | 
   grep -v "^$(tmux display-message -p "#S")|" | 
   awk -F"|" "{
@@ -21,4 +27,3 @@
   awk "{print \$1}" | 
   xargs -r tmux switch-client -t
 '
-
