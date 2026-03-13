@@ -6,6 +6,7 @@ key_binding="${key_binding_option:-"j"}"
 
 tmux bind-key "$key_binding" display-popup -E -w 80% -h 60% -T ' tmux-session-manager ' '
   tmux list-sessions -F "#{session_activity}|#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" | 
+  sort -r | 
   grep -v "^[^|]*|$(tmux display-message -p "#S")|" | 
   awk -F"|" "{
     status = (\$4 == \"attached\") ? \"\" : \"\"
