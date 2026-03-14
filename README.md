@@ -29,7 +29,7 @@ Just a simple and fast session manager for tmux — available as a plugin or sta
 1. Add plugin to your `~/.tmux.conf`:
 
 ```bash
-set -g @plugin 'santoshxshrestha/tmux-session-manager'
+set -g @plugin 'vimlinuz/tmux-sm'
 ```
 
 2. Press `prefix` + `I` to install
