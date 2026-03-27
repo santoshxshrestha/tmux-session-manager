@@ -49,13 +49,9 @@ get_preview_window() {
 }
 
 get_delete_cmd() {
-    local filter_cmd
-    filter_cmd=$(get_sessions_filter_cmd)
-    printf "bash -c 'tmux kill-session -t {} 2>/dev/null && %s'" "$filter_cmd"
-}
-
-get_refresh_cmd() {
-    get_sessions_filter_cmd
+    cat <<'DELETEEOF'
+tmux kill-session -t {} 2>/dev/null
+DELETEEOF
 }
 
 get_sessions_filter_cmd() {
@@ -66,14 +62,11 @@ CMDEOF
 
 get_fzf_bindings() {
     local refresh_cmd
-    refresh_cmd=$(get_refresh_cmd)
-
-    local delete_cmd
-    delete_cmd=$(get_delete_cmd)
+    refresh_cmd=$(get_sessions_filter_cmd)
 
     printf '%s\n%s\n%s' \
         "--bind=${KEY_REFRESH}:reload(${refresh_cmd})" \
-        "--bind=${KEY_DELETE}:execute-silent(${delete_cmd})+reload(${refresh_cmd})" \
+        "--bind=${KEY_DELETE}:execute(tmux kill-session -t {} 2>/dev/null)+reload(${refresh_cmd})" \
         "--bind=ctrl-f:execute(bash ${SCRIPT_DIR}/new-session.sh)"
 }
 
@@ -88,7 +81,9 @@ get_header_text() {
 }
 
 get_preview_cmd() {
-    printf 'bash -c "tmux list-windows -t \$(echo {} | cut -d\\" \\" -f1)"'
+    cat <<'PREVIEWEOF'
+bash -c 's=$(echo {} | awk "{print \$1}"); tmux list-windows -t "$s" -F "#{window_index}: #{window_name}#{?window_active,*,}"
+PREVIEWEOF
 }
 
 get_fzf_options() {
