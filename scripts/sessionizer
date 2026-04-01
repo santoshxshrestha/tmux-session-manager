@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
 
+switcher_key="$(tmux show-option -gqv "@session_switcher_key")"
+creator_key="$(tmux show-option -gqv "@session_create_key")"
+
+if [[ -z "$switcher_key" ]]; then
+    switcher_key="$(tmux show-option -gqv "@session_manager_key")"
+fi
+
+if [[ -z "$creator_key" ]]; then
+    creator_key="$(tmux show-option -gqv "@session_creator_key")"
+fi
+
+switcher_key="${switcher_key:-s}"
+creator_key="${creator_key:-j}"
+
+header_text="󱂬 Session Creator | Prefix+$switcher_key: switcher | Prefix+$creator_key: creator"
+
 selected=$(
     find "$HOME" -mindepth 1 -maxdepth 4 \
         \( -name "node_modules" -o -name ".git" -o -name "target" \) -prune -o \
         -type d -print |
-        fzf --reverse --prompt="󱞁 -> " --header="󱂬 Session Creator" \
+        fzf --reverse --prompt="󱞁 -> " --header="$header_text" \
             --header-first \
             --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
             --border=rounded \

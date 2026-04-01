@@ -2,11 +2,27 @@
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+switcher_key="$(tmux show-option -gqv "@session_switcher_key")"
+creator_key="$(tmux show-option -gqv "@session_create_key")"
+
+if [[ -z "$switcher_key" ]]; then
+    switcher_key="$(tmux show-option -gqv "@session_manager_key")"
+fi
+
+if [[ -z "$creator_key" ]]; then
+    creator_key="$(tmux show-option -gqv "@session_creator_key")"
+fi
+
+switcher_key="${switcher_key:-s}"
+creator_key="${creator_key:-j}"
+
+header_text="󰆍 Session Switcher | Prefix+$creator_key: creator | Ctrl-O: new | Ctrl-D: delete"
+
 selected_session=$(
     bash "$script_dir/session-list" |
         fzf --reverse \
             --prompt="-> " \
-            --header="󰆍 Session Switcher | Ctrl-O: new | Ctrl-D: delete" \
+            --header="$header_text" \
             --header-first \
             --ignore-case \
             --delimiter='\t' \
