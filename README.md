@@ -10,7 +10,7 @@ Just a simple and fast session manager for tmux — available as a plugin or sta
 - View all other sessions (excluding your current one)
 - See how many windows each has
 - Switch to it or kill it with a keybind
-- Create new-session and switch to the newly create session
+- Create a new session and switch to the newly created session
 
 ---
 
@@ -125,9 +125,8 @@ Once opened:
 
 - **Type to search** - Fuzzy find sessions by name
 - **Enter** - Switch to selected session
-- **Ctrl-R** - Refresh the session list
+- **Ctrl-O** - Open session creator from switcher
 - **Ctrl-D** - Delete the selected session
-- **Ctrl-N** - Create new-session and switch-client to newly created session
 - **Esc** - Close without switching session
 
 ## Customization
