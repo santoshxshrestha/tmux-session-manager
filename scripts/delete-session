@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+session_name="$1"
+
+if [[ -z "$session_name" ]]; then
+    exit 0
+fi
+
+current_session="$(tmux display-message -p '#S')"
+
+if [[ "$session_name" == "$current_session" ]]; then
+    tmux display-message "Cannot delete current session: $session_name"
+    exit 0
+fi
+
+escaped_session_name=${session_name//\'/\'"\'"\'}
+
+tmux confirm-before -p "Delete session '$session_name'? (y/n)" "kill-session -t '$escaped_session_name'"

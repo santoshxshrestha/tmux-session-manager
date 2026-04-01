@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+current_session="$(tmux display-message -p '#S')"
+
+# Fields: activity_timestamp|session_name|window_count|attached_state
+tmux list-sessions -F "#{session_activity}|#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" |
+    # Sort by activity timestamp (field 1), numeric descending: most recent first.
+    sort -t'|' -k1,1nr |
+    awk -F'|' -v current="$current_session" '
+        {
+            marker = ($2 == current) ? "●" : "○"
+            status = ($4 == "attached") ? " (attached)" : ""
+            printf "%s\t%s\t%s\t%s  %-24s %3s%s\n", $2, $3, $4, marker, $2, $3, status
+        }
+    '

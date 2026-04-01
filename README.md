@@ -1,16 +1,17 @@
 # tmux-session-manager
 
-A fuzzy terminal popup to manage tmux sessions using `fzf`.
-![tmux session manager popup](./assets/session-manager.png)
+A fuzzy terminal popup to manage and create tmux sessions using `fzf`.
+
+![tmux session switcher popup](./assets/session-manager.png)
 
 ![tmux session creator popup](./assets/session-creator.png)
 
-Just a simple and fast session manager for tmux — available as a plugin or standalone. It opens a popup using `fzf` where you can:
+Just a simple and fast tmux workflow helper. It opens popups using `fzf` where you can:
 
-- View all other sessions (excluding your current one)
-- See how many windows each has
-- Switch to it or kill it with a keybind
-- Create new-session and switch to the newly create session
+- View and switch sessions quickly
+- Preview windows in the selected session
+- Delete a session with confirmation
+- Create or jump to a session from a directory
 
 ---
 
@@ -18,7 +19,7 @@ Just a simple and fast session manager for tmux — available as a plugin or sta
 
 - `tmux` 3.2 or higher (for `display-popup`)
 - [`fzf`](https://github.com/junegunn/fzf)
-- Common UNIX tools (`awk`, `bash`)
+- Common UNIX tools (`awk`, `bash`, `find`, `tree`)
 
 ---
 
@@ -32,7 +33,7 @@ Just a simple and fast session manager for tmux — available as a plugin or sta
 set -g @plugin 'vimlinuz/tmux-sm'
 ```
 
-2. Press `prefix` + `I` to install
+2. Press `prefix` + `I` to install.
 
 ### Manual Installation
 
@@ -54,123 +55,115 @@ run-shell ~/.tmux/plugins/tmux-sm/tmux-sm.tmux
 tmux source-file ~/.tmux.conf
 ```
 
-### Quick Install (Standalone)
-
-Add these lines to your ~/.tmux.conf:
-
-```bash
- bind j display-popup -E -w 80% -h 60% -T ' tmux-session-manager ' '
-  tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" |
-  grep -v "^$(tmux display-message -p "#S")|" |
-  awk -F"|" "{
-    status = (\$3 == \"attached\") ? \"\" : \"\"
-    printf \"%-20s %s %2s windows %s\\n\", \$1, status, \$2, \"\"
-  }" |
-  fzf --reverse \
-      --prompt="-> " \
-      --header="═══ Session Switcher ═══ | Ctrl-R: refresh | Ctrl-D: delete | Ctrl-N: new-session" \
-      --header-first \
-      --border=rounded \
-      --color="header:italic" \
-      --preview="tmux list-windows -t {1} -F \"  #{window_index}: #{window_name} #{?window_active,(active),}\"" \
-      --preview-window="right:40%:wrap" \
-      --bind="ctrl-r:reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
-      --bind="ctrl-d:execute(tmux kill-session -t {1})+reload(tmux list-sessions -F \"#{session_name}|#{session_windows}|#{?session_attached,attached,detached}\" | grep -v \"^\$(tmux display-message -p \"#S\")|\" | awk -F\"|\" \"{status = (\\\$3 == \\\"attached\\\") ? \\\"\\\" : \\\"\\\"; printf \\\"%-20s %s %2s windows %s\\\\n\\\", \\\$1, status, \\\$2, \\\"\\\"}\")" \
-      --bind="ctrl-n:execute(bash -c '\''echo -n -e \"== New tmux Session === \n Session Name ->  \" && read name && [ -n \"\$name\" ] && tmux new-session -d -s \"\$name\" 2>/dev/null && tmux switch-client -t \"\$name\"'\'')+abort" \
-      --info=inline \
-      --layout=reverse |
-  awk "{print \$1}" |
-  xargs -r tmux switch-client -t
-'
-```
-
-Then reload your tmux config:
-
-```bash
-tmux source-file ~/.tmux.conf
-```
-
 ## Usage
 
-### Default Key Binding
+### Default Key Bindings
 
-- **Press `prefix` + `j`** to open the session manager
+- **Press `prefix` + `s`** to open the session switcher
+- **Press `prefix` + `j`** to open the session creator
 
-### Custom Key Binding
+### Custom Key Bindings
 
-Add to your `~/.tmux.conf` to change the default key:
+Add to your `~/.tmux.conf` to change default keys:
 
 ```bash
-set -g @session_manager_key 'S'  # Use 'S' instead of 'j'
+set -g @session_switcher_key 'S'  # Switcher key (default: 's')
+set -g @session_create_key 'J'    # Creator key (default: 'j')
 ```
 
-### Controls
+Legacy option names are still supported:
 
-Once opened:
+```bash
+set -g @session_manager_key 'S'
+set -g @session_creator_key 'J'
+```
+
+### Session Switcher Controls
+
+Inside the switcher popup:
 
 - **Type to search** - Fuzzy find sessions by name
 - **Enter** - Switch to selected session
-- **Ctrl-R** - Refresh the session list
-- **Ctrl-D** - Delete the selected session
-- **Ctrl-N** - Create new-session and switch-client to newly created session
-- **Esc** - Close without switching session
+- **Ctrl-O** - Open session creator
+- **Ctrl-D** - Delete selected session (with `y/n` confirmation)
+- **Esc** - Close without switching
+
+### Session Creator Behavior
+
+Inside the creator popup:
+
+- **Type to search** - Fuzzy find directories under `$HOME`
+- **Enter** - Create/switch to session named from directory basename
+- If tmux is not running, it starts a new tmux session
+- If the session exists, it switches/attaches to it
+- **Esc** - Close without creating/switching
 
 ## Customization
 
 ### Available Options
 
 ```bash
-# Key binding (default: 'j')
-set -g @session_manager_key 'j'
+# Session switcher key binding (default: 's')
+set -g @session_switcher_key 's'
+
+# Session creator key binding (default: 'j')
+set -g @session_create_key 'j'
+
+# Popup width (default: '80%')
+set -g @session_popup_width '80%'
+
+# Popup height (default: '60%')
+set -g @session_popup_height '60%'
 ```
 
-### Manual Customization (Standalone)
+### Popup Size (Current Default)
 
-Want to change the keybinding? Replace `j` with your preferred key:
+Default popup size:
+
+- Width: `80%`
+- Height: `60%`
+
+To change popup size, set options in your `~/.tmux.conf`:
 
 ```bash
-bind j display-popup -E -w 80% -h 60% -T 'tmux-session-manager' '
-```
-
-Want a different popup size? Adjust the `-w` and `-h` values:
-
-```bash
-bind j display-popup -E -w <width> -h <height> -T 'tmux-session-manager' '
+set -g @session_popup_width '90%'
+set -g @session_popup_height '70%'
 ```
 
 ## Troubleshooting
 
-**Popup doesn't appear?**
+**Popup does not appear?**
 
 - Make sure you have tmux 3.2+: `tmux -V`
-- Check if `display-popup` is available: `tmux list-commands | grep popup`
+- Check popup command support: `tmux list-commands | grep popup`
 
-**fzf not found?**
+**`fzf` not found?**
 
 - Install fzf: `brew install fzf` or `apt install fzf`
 - Or follow the [official fzf installation guide](https://github.com/junegunn/fzf#installation)
 
-**No sessions to switch to?**
+**`tree` not found in preview?**
 
-- The manager only shows _other_ sessions (not your current one)
-- Create more sessions: `tmux new-session -d -s mysession`
+- Install `tree` package for your OS
+- Or remove/adjust the preview command in `scripts/sessionizer`
 
 **Key binding conflicts?**
 
-If `prefix + j` conflicts with existing bindings, change it:
+If `prefix + s` or `prefix + j` conflicts with existing bindings, change them:
 
 ```bash
-set -g @session_manager_key 'your-preferred-key'
+set -g @session_switcher_key 'your-switcher-key'
+set -g @session_create_key 'your-creator-key'
 ```
 
-## 🤝 Contributing
+## Contributing
 
-Found a bug or have a feature idea? Feel free to open an issue or submit a PR!
+Found a bug or have a feature idea? Feel free to open an issue or submit a PR.
 
 ## License
 
-MIT License - [LICENSE](LICENSE) feel free to use this however you want!
+MIT License - see [LICENSE](LICENSE).
 
 ---
 
-**⭐ Star this repo if it made your tmux workflow better!**
+**Star this repo if it improved your tmux workflow.**

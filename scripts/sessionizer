@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+switcher_key="$(tmux show-option -gqv "@session_switcher_key")"
+creator_key="$(tmux show-option -gqv "@session_create_key")"
+
+if [[ -z "$switcher_key" ]]; then
+    switcher_key="$(tmux show-option -gqv "@session_manager_key")"
+fi
+
+if [[ -z "$creator_key" ]]; then
+    creator_key="$(tmux show-option -gqv "@session_creator_key")"
+fi
+
+switcher_key="${switcher_key:-s}"
+creator_key="${creator_key:-j}"
+
+header_text="󱂬 Session Creator | Prefix+$switcher_key: switcher | Prefix+$creator_key: creator"
+
+selected=$(
+    find "$HOME" -mindepth 1 -maxdepth 4 \
+        \( -name "node_modules" -o -name ".git" -o -name "target" \) -prune -o \
+        -type d -print |
+        fzf --reverse --prompt="󱞁 -> " --header="$header_text" \
+            --header-first \
+            --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
+            --border=rounded \
+            --ignore-case \
+            --wrap \
+            --info=hidden \
+            --input-border=rounded \
+            --preview='tree -C -L 3 {}' \
+            --preview-border=rounded \
+            --preview-window=right:50%:wrap
+)
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s "$selected_name" -c "$selected"
+    exit 0
+fi
+
+if ! tmux has-session -t="$selected_name" 2>/dev/null; then
+    tmux new-session -ds "$selected_name" -c "$selected"
+fi
+
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t "$selected_name"
+    exit 0
+else
+    tmux switch-client -t "$selected_name"
+fi
