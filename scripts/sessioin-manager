@@ -3,24 +3,28 @@
 current_session=$(tmux display-message -p '#S')
 
 selected_session=$(
-    tmux ls -F "#{session_name}|#{session_windows|#{?session_attached,attached,detached}" |
-        awk -v current="$current_session" '{if ($1 == current) print $1 " (attached)"; else print $1}' |
+    tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" |
+        awk -F'|' -v current="$current_session" '
+            {
+                marker = ($1 == current) ? "*" : " "
+                printf "%s\t%s\t%s\t%s %-24s %3s windows (%s)\n", $1, $2, $3, marker, $1, $2, $3
+            }
+        ' |
         fzf --reverse \
             --prompt="-> " \
             --header="━━━━━━━━━━━━━━━ ✦ SESSION-SWITCHER ✦ ━━━━━━━━━━━━━━━" \
             --header-first \
             --ignore-case \
+            --delimiter='\t' \
+            --with-nth=4 \
             --color="header:italic" \
-            --border=rounded \
             --info=hidden \
             --input-border=rounded \
-            --color="header:italic" \
             --preview-border=rounded \
             --preview-window=right:50%:wrap \
-            --preview="tmux capture-pane -pS -100 -t {}" \
-            --bind="ctrl-o:execute-silent(tmux neww tmux-session-manager --create_session)+abort" \
+            --preview="tmux list-windows -t {1}" \
             --layout=reverse |
-        awk '{print $1}'
+        awk -F'\t' '{print $1}'
 )
 
 if [[ -z $selected_session ]]; then
