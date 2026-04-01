@@ -6,6 +6,7 @@ tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,at
     awk -F'|' -v current="$current_session" '
         {
             marker = ($1 == current) ? "●" : "○"
-            printf "%s\t%s\t%s\t%s  %-24s %3s (%s)\n", $1, $2, $3, marker, $1, $2, $3
+            status = ($3 == "attached") ? " (attached)" : ""
+            printf "%s\t%s\t%s\t%s  %-24s %3s%s\n", $1, $2, $3, marker, $1, $2, status
         }
     '
