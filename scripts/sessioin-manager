@@ -6,12 +6,12 @@ selected_session=$(
     bash "$script_dir/session-list" |
         fzf --reverse \
             --prompt="-> " \
-            --header="━━━━━━━━━━━━━━━ ✦ SESSION-SWITCHER ✦ ━━━━━━━━━━━━━━━ | Ctrl-O: new | Ctrl-D: delete" \
+            --header="󰆍 Session Switcher | Ctrl-O: new | Ctrl-D: delete" \
             --header-first \
             --ignore-case \
             --delimiter='\t' \
             --with-nth=4 \
-            --color="header:italic" \
+            --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
             --border=rounded \
             --info=hidden \
             --input-border=rounded \

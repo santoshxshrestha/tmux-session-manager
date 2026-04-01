@@ -5,7 +5,8 @@ current_session="$(tmux display-message -p '#S')"
 tmux list-sessions -F "#{session_name}|#{session_windows}|#{?session_attached,attached,detached}" |
     awk -F'|' -v current="$current_session" '
         {
-            marker = ($1 == current) ? "*" : " "
-            printf "%s\t%s\t%s\t%s %-24s %3s windows (%s)\n", $1, $2, $3, marker, $1, $2, $3
+            marker = ($1 == current) ? "●" : "○"
+            state_icon = ($3 == "attached") ? "󰖯" : "󰍹"
+            printf "%s\t%s\t%s\t%s  %s %-24s 󱂬 %3s (%s)\n", $1, $2, $3, marker, state_icon, $1, $2, $3
         }
     '

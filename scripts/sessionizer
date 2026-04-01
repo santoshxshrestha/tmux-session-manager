@@ -4,9 +4,9 @@ selected=$(
     find "$HOME" -mindepth 1 -maxdepth 4 \
         \( -name "node_modules" -o -name ".git" -o -name "target" \) -prune -o \
         -type d -print |
-        fzf --reverse --prompt="-> " --header="━━━━━━━━━━━━━━━ ✦ SESSIONIZER ✦ ━━━━━━━━━━━━━━━" \
+        fzf --reverse --prompt="󱞁 -> " --header="󱂬 Session Creator" \
             --header-first \
-            --color="header:italic" \
+            --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
             --border=rounded \
             --ignore-case \
             --wrap \
