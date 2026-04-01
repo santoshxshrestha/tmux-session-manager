@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+current_session=$(tmux display-message -p '#S')
+
+selected_session=$(
+    tmux ls -F "#{session_name}|#{session_windows|#{?session_attached,attached,detached}" |
+        awk -v current="$current_session" '{if ($1 == current) print $1 " (attached)"; else print $1}' |
+        fzf --reverse \
+            --prompt="-> " \
+            --header="━━━━━━━━━━━━━━━ ✦ SESSION-SWITCHER ✦ ━━━━━━━━━━━━━━━" \
+            --header-first \
+            --ignore-case \
+            --color="header:italic" \
+            --border=rounded \
+            --info=hidden \
+            --input-border=rounded \
+            --color="header:italic" \
+            --preview-border=rounded \
+            --preview-window=right:50%:wrap \
+            --preview="tmux capture-pane -pS -100 -t {}" \
+            --bind="ctrl-o:execute-silent(tmux neww tmux-session-manager --create_session)+abort" \
+            --layout=reverse |
+        awk '{print $1}'
+)
+
+if [[ -z $selected_session ]]; then
+    exit 0
+fi
+
+if [[ -n "$selected_session" ]]; then
+    tmux switch-client -t "$selected_session"
+fi

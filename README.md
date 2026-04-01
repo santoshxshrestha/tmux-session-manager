@@ -56,6 +56,10 @@ tmux source-file ~/.tmux.conf
 
 ### Quick Install (Standalone)
 
+> ⚠️ **Discontinued:** the standalone snippet below is kept for legacy users only.
+> It is messy, hard to refactor safely, and no longer actively maintained.
+> Prefer the plugin install path above for ongoing updates.
+
 Add these lines to your ~/.tmux.conf:
 
 ```bash
@@ -90,18 +94,29 @@ Then reload your tmux config:
 tmux source-file ~/.tmux.conf
 ```
 
+It still works, but it is provided as-is.
+
 ## Usage
 
-### Default Key Binding
+### Default Key Bindings
 
-- **Press `prefix` + `j`** to open the session manager
+- **Press `prefix` + `s`** to open the session switcher
+- **Press `prefix` + `j`** to open the session creator
 
-### Custom Key Binding
+### Custom Key Bindings
 
-Add to your `~/.tmux.conf` to change the default key:
+Add to your `~/.tmux.conf` to change the default keys:
 
 ```bash
-set -g @session_manager_key 'S'  # Use 'S' instead of 'j'
+set -g @session_switcher_key 'S'  # Switcher key (default: 's')
+set -g @session_create_key 'J'    # Creator key (default: 'j')
+```
+
+Legacy options are still supported for compatibility:
+
+```bash
+set -g @session_manager_key 'S'
+set -g @session_creator_key 'J'
 ```
 
 ### Controls
@@ -120,8 +135,11 @@ Once opened:
 ### Available Options
 
 ```bash
-# Key binding (default: 'j')
-set -g @session_manager_key 'j'
+# Session switcher key binding (default: 's')
+set -g @session_switcher_key 's'
+
+# Session creator key binding (default: 'j')
+set -g @session_create_key 'j'
 ```
 
 ### Manual Customization (Standalone)
@@ -157,10 +175,11 @@ bind j display-popup -E -w <width> -h <height> -T 'tmux-session-manager' '
 
 **Key binding conflicts?**
 
-If `prefix + j` conflicts with existing bindings, change it:
+If `prefix + s` or `prefix + j` conflicts with existing bindings, change them:
 
 ```bash
-set -g @session_manager_key 'your-preferred-key'
+set -g @session_switcher_key 'your-switcher-key'
+set -g @session_create_key 'your-creator-key'
 ```
 
 ## 🤝 Contributing
