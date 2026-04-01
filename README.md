@@ -130,15 +130,6 @@ set -g @session_popup_width '90%'
 set -g @session_popup_height '70%'
 ```
 
-## Screenshots
-
-Current placeholders:
-
-- Switcher: `assets/session-manager.png`
-- Creator: `assets/session-creator.png`
-
-Update these files with your newest screenshots anytime.
-
 ## Troubleshooting
 
 **Popup does not appear?**
