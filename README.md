@@ -114,6 +114,12 @@ set -g @session_popup_width '80%'
 
 # Popup height (default: '60%')
 set -g @session_popup_height '60%'
+
+# Session switcher header (default: dynamic header with key hints)
+set -g @session_switcher_header ''
+
+# Session creator header (default: dynamic header with key hints)
+set -g @session_creator_header ''
 ```
 
 ### Popup Size (Current Default)
@@ -129,6 +135,17 @@ To change popup size, set options in your `~/.tmux.conf`:
 set -g @session_popup_width '90%'
 set -g @session_popup_height '70%'
 ```
+
+### Custom Header Text
+
+You can override popup header text for both views:
+
+```bash
+set -g @session_switcher_header '󰆍 My Sessions | Ctrl-O new | Ctrl-D delete'
+set -g @session_creator_header '󱂬 Project Picker'
+```
+
+If these options are empty, the plugin uses dynamic default headers with key hints.
 
 ## Troubleshooting
 

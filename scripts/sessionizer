@@ -2,6 +2,7 @@
 
 switcher_key="$(tmux show-option -gqv "@session_switcher_key")"
 creator_key="$(tmux show-option -gqv "@session_create_key")"
+custom_creator_header="$(tmux show-option -gqv "@session_creator_header")"
 
 if [[ -z "$switcher_key" ]]; then
     switcher_key="$(tmux show-option -gqv "@session_manager_key")"
@@ -14,7 +15,11 @@ fi
 switcher_key="${switcher_key:-s}"
 creator_key="${creator_key:-j}"
 
-header_text="󱂬 Session Creator | Prefix+$switcher_key: switcher | Prefix+$creator_key: creator"
+if [[ -n "$custom_creator_header" ]]; then
+    header_text="$custom_creator_header"
+else
+    header_text="󱂬 Session Creator | Prefix+$switcher_key: switcher | Prefix+$creator_key: creator"
+fi
 
 selected=$(
     find "$HOME" -mindepth 1 -maxdepth 4 \
