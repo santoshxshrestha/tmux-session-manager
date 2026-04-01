@@ -17,5 +17,5 @@ fi
 session_switcher_key="${session_switcher_key:-s}"
 session_create_key="${session_create_key:-j}"
 
-tmux bind-key "$session_switcher_key" display-popup -E -w 80% -h 60% -T ' tmux-session-switcher ' "bash '$current_dir/scripts/sessioin-manager'"
-tmux bind-key "$session_create_key" display-popup -E -w 80% -h 60% -T ' tmux-session-creator ' "bash '$current_dir/scripts/sessionizer'"
+tmux bind-key "$session_switcher_key" display-popup -E -B -w 80% -h 60% "bash '$current_dir/scripts/sessioin-manager'"
+tmux bind-key "$session_create_key" display-popup -E -B -w 80% -h 60% "bash '$current_dir/scripts/sessionizer'"

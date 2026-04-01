@@ -12,6 +12,7 @@ selected_session=$(
             --delimiter='\t' \
             --with-nth=4 \
             --color="header:italic" \
+            --border=rounded \
             --info=hidden \
             --input-border=rounded \
             --preview-border=rounded \
