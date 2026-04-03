@@ -46,7 +46,7 @@ git clone https://github.com/vimlinuz/tmux-sm ~/.tmux/plugins/tmux-sm
 2. Add to your `~/.tmux.conf`:
 
 ```bash
-run-shell ~/.tmux/plugins/tmux-sm/tmux-sm.tmux
+run-shell ~/.tmux/plugins/tmux-sm/sm.tmux
 ```
 
 3. Reload tmux config:
