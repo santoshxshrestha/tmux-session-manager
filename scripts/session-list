@@ -2,8 +2,8 @@
 
 current_session="$(tmux display-message -p '#S')"
 
-# Fields: activity_timestamp|session_name
-tmux list-sessions -F "#{session_activity}|#{session_name}" |
+# Fields: activity_timestamp|session_name|created_text
+tmux list-sessions -F "#{session_activity}|#{session_name}|#{t:session_created}" |
     # Sort by activity timestamp (field 1), numeric descending: most recent first.
     sort -t'|' -k1,1nr |
     awk -F'|' -v current="$current_session" '
@@ -11,6 +11,6 @@ tmux list-sessions -F "#{session_activity}|#{session_name}" |
             marker = ($2 == current) ? ">" : " "
             # Column 1 keeps the raw session name for fzf placeholders ({1});
             # column 2 is the visible label used with --with-nth=2.
-            printf "%s\t%s  %-24s\n", $2, marker, $2
+            printf "%s\t%s %-10s %s\n", $2, marker, $2, $3
         }
     '
