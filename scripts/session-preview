@@ -3,8 +3,8 @@
 session="${1:-$(tmux display-message -p '#{session_name}')}"
 
 tmux list-windows -t "$session" \
-    -F '#{?window_active,>, }|#{window_index}|#{window_name}|#{pane_current_command}|#{window_id}' |
+    -F '#{?window_active,>, }|#{window_index}|#{pane_current_command}|#{window_panes}' |
     awk -F'|' '{
-      printf "%s  %-1s  %-12s %-12s %s\n",
-             $1, $2, $3, $4, $5
+      printf "%s  %-2s %-14s [%s]\n",
+             $1, $2, $3, $4
     }'
