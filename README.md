@@ -71,13 +71,6 @@ set -g @session_switcher_key 'S'  # Switcher key (default: 's')
 set -g @session_create_key 'J'    # Creator key (default: 'j')
 ```
 
-Legacy option names are still supported:
-
-```bash
-set -g @session_manager_key 'S'
-set -g @session_creator_key 'J'
-```
-
 ### Session Switcher Controls
 
 Inside the switcher popup:
