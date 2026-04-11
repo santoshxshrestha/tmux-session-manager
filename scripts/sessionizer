@@ -25,7 +25,7 @@ selected=$(
     find "$HOME" -mindepth 1 -maxdepth 4 \
         \( -name "node_modules" -o -name ".git" -o -name "target" \) -prune -o \
         -type d -print |
-        fzf --reverse --prompt="󱞁 -> " --header="$header_text" \
+        fzf --reverse --prompt=" " --header="$header_text" \
             --header-first \
             --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
             --border=rounded \
