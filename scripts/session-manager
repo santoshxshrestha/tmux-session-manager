@@ -39,6 +39,7 @@ selected_session=$(
             --preview-border=rounded \
             --preview-window=right:50%:wrap \
             --preview="tmux list-windows -t {1}" \
+            --preview="bash $script_dir/session-preview {1}" \
             --bind="ctrl-o:become(bash '$script_dir/sessionizer')" \
             --bind="ctrl-d:execute-silent(bash '$script_dir/delete-session' {1})+reload(bash '$script_dir/session-list')" \
             --layout=reverse |
