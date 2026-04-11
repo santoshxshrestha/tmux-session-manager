@@ -13,6 +13,4 @@ if [[ "$session_name" == "$current_session" ]]; then
     exit 0
 fi
 
-escaped_session_name=${session_name//\'/\'"\'"\'}
-
-tmux confirm-before -p "Delete session '$session_name'? (y/n)" "kill-session -t '$escaped_session_name'"
+tmux kill-session -t "$session_name"
