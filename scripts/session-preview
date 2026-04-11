@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+session="${1:-$(tmux display-message -p '#{session_name}')}"
+
+tmux list-windows -t "$session" \
+    -F '#{?window_active,▶, }|#{window_index}|#{window_name}|#{pane_current_command}|#{window_id}' |
+    awk -F'|' '{
+      printf "%s  %-1s  %-8s %-8s %s\n",
+             $1, $2, $3, $4, $5
+    }'
