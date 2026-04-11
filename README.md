@@ -10,7 +10,7 @@ Just a simple and fast tmux workflow helper. It opens popups using `fzf` where y
 
 - View and switch sessions quickly
 - Preview windows in the selected session
-- Delete a session with confirmation
+- Delete a session
 - Create or jump to a session from a directory
 
 ---
@@ -78,7 +78,9 @@ Inside the switcher popup:
 - **Type to search** - Fuzzy find sessions by name
 - **Enter** - Switch to selected session
 - **Ctrl-O** - Open session creator
-- **Ctrl-D** - Delete selected session (with `y/n` confirmation)
+- **Ctrl-D** - Delete selected session
+- **Ctrl-l** - Change the active window in selected session to next
+- **Ctrl-h** - Change the active window in selected session to previous
 - **Esc** - Close without switching
 
 ### Session Creator Behavior
