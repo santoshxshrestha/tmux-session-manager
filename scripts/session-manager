@@ -13,7 +13,7 @@ selected_session=$(
         fzf --reverse \
             --ignore-case \
             --delimiter='\t' \
-            --with-nth=4 \
+            --with-nth=2 \
             --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
             --border=rounded \
             --info=hidden \
