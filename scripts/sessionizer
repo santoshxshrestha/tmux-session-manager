@@ -1,40 +1,18 @@
 #!/usr/bin/env bash
 
-switcher_key="$(tmux show-option -gqv "@session_switcher_key")"
-creator_key="$(tmux show-option -gqv "@session_create_key")"
-custom_creator_header="$(tmux show-option -gqv "@session_creator_header")"
-
-if [[ -z "$switcher_key" ]]; then
-    switcher_key="$(tmux show-option -gqv "@session_manager_key")"
-fi
-
-if [[ -z "$creator_key" ]]; then
-    creator_key="$(tmux show-option -gqv "@session_creator_key")"
-fi
-
-switcher_key="${switcher_key:-s}"
-creator_key="${creator_key:-j}"
-
-if [[ -n "$custom_creator_header" ]]; then
-    header_text="$custom_creator_header"
-else
-    header_text="󱂬 Session Creator | Prefix+$switcher_key: switcher | Prefix+$creator_key: creator"
-fi
-
 selected=$(
     find "$HOME" -mindepth 1 -maxdepth 4 \
         \( -name "node_modules" -o -name ".git" -o -name "target" \) -prune -o \
         -type d -print |
-        fzf --reverse --prompt=" " --header="$header_text" \
-            --header-first \
+        fzf --reverse \
             --color="header:italic,border:#908caa,pointer:#9ccfd8,marker:#eb6f92" \
             --border=rounded \
             --ignore-case \
             --wrap \
             --info=hidden \
-            --input-border=rounded \
+            --input-border=none \
             --preview='tree -C -L 3 {}' \
-            --preview-border=rounded \
+            --preview-border=left \
             --preview-window=right:50%:wrap
 )
 

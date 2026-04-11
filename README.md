@@ -6,7 +6,7 @@ A fuzzy terminal popup to manage and create tmux sessions using `fzf`.
 
 ![tmux session creator popup](./assets/session-creator.png)
 
-Just a simple and fast tmux workflow helper. It opens popups using `fzf` where you can:
+Just a simple and fast tmux workflow helper with a clean, minimal popup UI. It opens `fzf` popups where you can:
 
 - View and switch sessions quickly
 - Preview windows in the selected session
@@ -77,8 +77,8 @@ Inside the switcher popup:
 
 - **Type to search** - Fuzzy find sessions by name
 - **Enter** - Switch to selected session
-- **Ctrl-O** - Open session creator
-- **Ctrl-D** - Delete selected session
+- **Ctrl-o** - Open session creator
+- **Ctrl-d** - Delete selected session
 - **Ctrl-l** - Change the active window in selected session to next
 - **Ctrl-h** - Change the active window in selected session to previous
 - **Esc** - Close without switching
@@ -104,43 +104,26 @@ set -g @session_switcher_key 's'
 # Session creator key binding (default: 'j')
 set -g @session_create_key 'j'
 
-# Popup width (default: '80%')
-set -g @session_popup_width '80%'
+# Popup width (default: '60%')
+set -g @session_popup_width '60%'
 
-# Popup height (default: '60%')
-set -g @session_popup_height '60%'
-
-# Session switcher header (default: dynamic header with key hints)
-set -g @session_switcher_header ''
-
-# Session creator header (default: dynamic header with key hints)
-set -g @session_creator_header ''
+# Popup height (default: '40%')
+set -g @session_popup_height '40%'
 ```
 
 ### Popup Size (Current Default)
 
 Default popup size:
 
-- Width: `80%`
-- Height: `60%`
+- Width: `60%`
+- Height: `40%`
 
 To change popup size, set options in your `~/.tmux.conf`:
 
 ```bash
-set -g @session_popup_width '90%'
-set -g @session_popup_height '70%'
+set -g @session_popup_width '80%'
+set -g @session_popup_height '60%'
 ```
-
-### Custom Header Text
-
-You can override popup header text for both views:
-
-```bash
-set -g @session_switcher_header '󰆍 My Sessions | Ctrl-O new | Ctrl-D delete'
-set -g @session_creator_header '󱂬 Project Picker'
-```
-
-If these options are empty, the plugin uses dynamic default headers with key hints.
 
 ## Troubleshooting
 
