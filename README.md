@@ -1,8 +1,12 @@
-# tmux-session-manager
+# tmux-session-manager (tmux-sm)
 
 A fuzzy terminal popup to manage and create tmux sessions using `fzf`.
 
+## session switcher
+
 ![tmux session switcher popup](./assets/session-manager.png)
+
+## session creator
 
 ![tmux session creator popup](./assets/session-creator.png)
 
