@@ -93,7 +93,6 @@ Inside the creator popup:
 
 - **Type to search** - Fuzzy find directories under `$HOME`
 - **Enter** - Create/switch to session named from directory basename
-- If tmux is not running, it starts a new tmux session
 - If the session exists, it switches/attaches to it
 - **Esc** - Close without creating/switching
 
