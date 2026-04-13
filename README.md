@@ -2,13 +2,13 @@
 
 A fuzzy terminal popup to manage and create tmux sessions using `fzf`.
 
-## session switcher
+## session manager
 
-![tmux session switcher popup](./assets/session-manager.png)
+![tmux session manager popup](./assets/session-manager.png)
 
-## session creator
+## sessionizer
 
-![tmux session creator popup](./assets/session-creator.png)
+![tmux sessionizer popup](./assets/sessionizer.png)
 
 Just a simple and fast tmux workflow helper with a clean, minimal popup UI. It opens `fzf` popups where you can:
 
@@ -63,33 +63,33 @@ tmux source-file ~/.tmux.conf
 
 ### Default Key Bindings
 
-- **Press `prefix` + `s`** to open the session switcher
-- **Press `prefix` + `j`** to open the session creator
+- **Press `prefix` + `j`** to open the session-manager
+- **Press `prefix` + `i`** to open the sessionizer
 
 ### Custom Key Bindings
 
 Add to your `~/.tmux.conf` to change default keys:
 
 ```bash
-set -g @session_switcher_key 'S'  # Switcher key (default: 's')
-set -g @session_create_key 'J'    # Creator key (default: 'j')
+set -g @session_manager_key 'k'  # session-manager key (default: 'j')
+set -g @sessionizer_key 'j'    # sessionizer key (default: 'i')
 ```
 
-### Session Switcher Controls
+### Session Manager controls
 
-Inside the switcher popup:
+Inside the popup:
 
 - **Type to search** - Fuzzy find sessions by name
 - **Enter** - Switch to selected session
-- **Ctrl-o** - Open session creator
+- **Ctrl-i** - Open sessionizer
 - **Ctrl-d** - Delete selected session
 - **Ctrl-l** - Change the active window in selected session to next
 - **Ctrl-h** - Change the active window in selected session to previous
 - **Esc** - Close without switching
 
-### Session Creator Behavior
+### sessionizer Behavior
 
-Inside the creator popup:
+Inside the popup:
 
 - **Type to search** - Fuzzy find directories under `$HOME`
 - **Enter** - Create/switch to session named from directory basename
@@ -101,32 +101,39 @@ Inside the creator popup:
 ### Available Options
 
 ```bash
-# Session switcher key binding (default: 's')
-set -g @session_switcher_key 's'
+# session-manager key binding (default: 'j')
+set -g @session_manager_key 's'
 
-# Session creator key binding (default: 'j')
-set -g @session_create_key 'j'
+# sessionizer key binding (default: 'i')
+set -g @sessionizer_key 'j'
 
-# Popup width (default: '60%')
-set -g @session_popup_width '60%'
+# If you want to use sessionizer without <prefix> (e.g. Alt+i), you can do so by prepending -n:
+set -g @sessionizer_key '-n M-i'
 
-# Popup height (default: '40%')
-set -g @session_popup_height '40%'
+# session-manager popup height (default: '30%')
+set -g @session_manager_height '40%'
+
+# session-manager popup width (default: '40%')
+set -g @session_manager_width '50%'
+
+# sessionizer popup height (default: '60%' )
+set -g @sessionizer_height '70%'
+
+# sessionizer popup width (default: '60%' )
+set -g @sessionizer_width '80%'
 ```
 
 ### Popup Size (Current Default)
 
 Default popup size:
 
-- Width: `60%`
-- Height: `40%`
+- Width of session-manager: `40%`
+- Height of session-manager: `30%`
 
-To change popup size, set options in your `~/.tmux.conf`:
+- Width of sessionizer: `60%`
+- Height of sessionizer: `60%`
 
-```bash
-set -g @session_popup_width '80%'
-set -g @session_popup_height '60%'
-```
+To change popup size, set options in your `~/.tmux.conf` as shown in above examples.
 
 ## Troubleshooting
 
@@ -147,12 +154,7 @@ set -g @session_popup_height '60%'
 
 **Key binding conflicts?**
 
-If `prefix + s` or `prefix + j` conflicts with existing bindings, change them:
-
-```bash
-set -g @session_switcher_key 'your-switcher-key'
-set -g @session_create_key 'your-creator-key'
-```
+If `prefix + j` or `prefix + i` conflicts with existing bindings, change them as shown in above examples.
 
 ## Contributing
 
@@ -164,4 +166,4 @@ MIT License - see [LICENSE](LICENSE).
 
 ---
 
-**Star this repo if it improved your tmux workflow.**
+**⭐ Star this repo if it improved your tmux workflow.**
