@@ -14,7 +14,7 @@ Just a simple and fast tmux workflow helper with a clean, minimal popup UI. It o
 
 - View and switch sessions quickly
 - Preview windows in the selected session
-- Delete a sessions
+- Delete a session
 - Create or jump to a session from a directory
 
 ---
@@ -124,11 +124,11 @@ set -g @sessionizer_width '80%'
 
 Default popup size:
 
-- Width of session-manager: `30%`
-- Height of session-manager: `40%`
+- Width of session-manager: `40%`
+- Height of session-manager: `30%`
 
 - Width of sessionizer: `60%`
-- Height of sessionzer: `60%`
+- Height of sessionizer: `60%`
 
 To change popup size, set options in your `~/.tmux.conf` as shown in above examples.
 
