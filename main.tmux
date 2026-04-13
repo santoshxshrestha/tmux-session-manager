@@ -6,7 +6,7 @@ session_manager_key="$(tmux show-option -gqv "@session_manager_key")"
 sessionizer_key="$(tmux show-option -gqv "@sessionizer_key")"
 
 session_manager_height="$(tmux show-option -gqv "@session_manager_height")"
-session_manager_width="$(tmux show-options -gqv "@session_manager_width")"
+session_manager_width="$(tmux show-option -gqv "@session_manager_width")"
 
 sessionizer_height="$(tmux show-option -gqv "@sessionizer_height")"
 sessionizer_width="$(tmux show-option -gqv "@sessionizer_width")"
