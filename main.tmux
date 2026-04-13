@@ -2,15 +2,23 @@
 
 current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-session_switcher_key="$(tmux show-option -gqv "@session_switcher_key")"
-session_create_key="$(tmux show-option -gqv "@session_create_key")"
-session_popup_width="$(tmux show-option -gqv "@session_popup_width")"
-session_popup_height="$(tmux show-option -gqv "@session_popup_height")"
+session_manager_key="$(tmux show-option -gqv "@session_manager_key")"
+sessionizer_key="$(tmux show-option -gqv "@sessionizer_key")"
 
-session_switcher_key="${session_switcher_key:-s}"
-session_create_key="${session_create_key:-j}"
-session_popup_width="${session_popup_width:-60%}"
-session_popup_height="${session_popup_height:-40%}"
+session_manager_height="$(tmux show-option -gqv "@session_manager_height")"
+session_manager_width="$(tmux show-options -gqv "@session_manager_width")"
 
-tmux bind-key "$session_switcher_key" display-popup -E -B -w "$session_popup_width" -h "$session_popup_height" "bash '$current_dir/scripts/session-manager'"
-tmux bind-key "$session_create_key" display-popup -E -B -w "$session_popup_width" -h "$session_popup_height" "bash '$current_dir/scripts/sessionizer'"
+sessionizer_height="$(tmux show-option -gqv "@sessionizer_height")"
+sessionizer_width="$(tmux show-option -gqv "@sessionizer_width")"
+
+session_manager_key="${session_manager_key:-j}"
+sessionizer_key="${sessionizer_key:-i}"
+
+session_manager_height="${session_manager_height:-30%}"
+session_manager_width="${session_manager_width:-40%}"
+
+sessionizer_height="${sessionizer_height:-60%}"
+sessionizer_width="${sessionizer_width:-60%}"
+
+tmux bind-key "$session_manager_key" display-popup -E -B -w "$session_manager_width" -h "$session_manager_height" "bash '$current_dir/scripts/session-manager'"
+tmux bind-key "$sessionizer_key" display-popup -E -B -w "$sessionizer_width" -h "$sessionizer_height" "bash '$current_dir/scripts/sessionizer'"
