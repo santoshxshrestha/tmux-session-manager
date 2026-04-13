@@ -107,6 +107,9 @@ set -g @session_manager_key 's'
 # sessionizer key binding (default: 'i')
 set -g @sessionizer_key 'j'
 
+# If you want to use sessionizer without <prefix> (e.g. Alt+i), you can do so by prepending -n:
+set -g @sessionizer_key '-n M-i'
+
 # session-manager popup height (default: '30%')
 set -g @session_manager_height '40%'
 
