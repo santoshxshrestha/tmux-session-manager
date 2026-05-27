@@ -110,6 +110,9 @@ set -g @sessionizer_key 'j'
 # If you want to use sessionizer without <prefix> (e.g. Alt+i), you can do so by prepending -n:
 set -g @sessionizer_key '-n M-i'
 
+# Similar thing for session_manager
+set -g @session_manager_key '-n M-j'
+
 # session-manager popup height (default: '30%')
 set -g @session_manager_height '40%'
 

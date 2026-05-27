@@ -20,7 +20,12 @@ session_manager_width="${session_manager_width:-40%}"
 sessionizer_height="${sessionizer_height:-60%}"
 sessionizer_width="${sessionizer_width:-60%}"
 
-tmux bind-key "$session_manager_key" display-popup -E -B -w "$session_manager_width" -h "$session_manager_height" "bash '$current_dir/scripts/session-manager'"
+if [[ "$session_manager_key" == *"-n"* ]]; then 
+    session_manager_key=$(echo "$session_manager_key" | awk '{print $NF}')
+    tmux bind-key -n "$session_manager_key" display-popup -E -B -w "$session_manager_width" -h "$session_manager_height" "bash '$current_dir/scripts/session-manager'"
+else 
+    tmux bind-key "$session_manager_key" display-popup -E -B -w "$session_manager_width" -h "$session_manager_height" "bash '$current_dir/scripts/session-manager'"
+fi
 
 if [[ "$sessionizer_key" == *"-n"* ]]; then
     sessionizer_key=$(echo "$sessionizer_key" | awk '{print $NF}')
