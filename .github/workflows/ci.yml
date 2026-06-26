@@ -1,0 +1,52 @@
+name: Release
+on:
+  push:
+    branches: ["main"]
+permissions:
+  contents: write
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed.outputs.changed }}
+      version: ${{ steps.current.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Get current version
+        id: current
+        run: |
+          ver=$(cat VERSION)
+          echo "version=$ver" >> $GITHUB_OUTPUT
+      - name: Get previous version
+        id: previous
+        run: |
+          prev_ver=$(git show HEAD~1:VERSION)
+          echo "version=$prev_ver" >> $GITHUB_OUTPUT
+      - name: Check for version change
+        id: changed
+        run: |
+          echo "Current version : ${{ steps.current.outputs.version }}"
+          echo "Previous version: ${{ steps.previous.outputs.version }}"
+          if [ "${{ steps.current.outputs.version }}" != "${{ steps.previous.outputs.version }}" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+  release:
+    needs: [check-version]
+    if: needs.check-version.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          version=${{ needs.check-version.outputs.version }}
+          gh release create "v${version}" \
+            --title "v${version}" \
+            --generate-notes \
+            --target "${{ github.sha }}"
